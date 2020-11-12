@@ -303,7 +303,7 @@ def is_deployed(host, deployment):
     if response.status_code != 200:
         return False
 
-    logger.info('Response text: %s', response.text.strip())
+    logger.info('Response sha: %s', response.text.strip()[:8])
     return response.text.strip() == deployment['sha']
 
 def update_mirror_refs(project, remote, pull_request):
@@ -374,8 +374,8 @@ def deploy(project, target, pull_request, revision, timeout):
 
     deployment = project.create_deployment(pull_request, revision)
 
-    message = 'Waiting up to {} seconds for Deployment {} to be available on {}'.format(
-        timeout, deployment['environment'], target
+    message = 'Waiting up to {} seconds for Deployment {} at revision {} to be available on {}'.format(
+        timeout, deployment['environment'], revision[:8], target
     )
     logger.info(message)
     project.add_deployment_status(target, deployment, 'pending', message)

@@ -11,7 +11,10 @@
 # Note that in pull_request_target the GITHUB token is read/write.
 name: create-pr-preview
 on:
-  pull_request_target:
+  # TEMPORARY FOR TESTING
+  #  pull_request_target:
+  #    types: [opened, synchronize, reopened, closed, labeled, unlabeled]
+  pull_request:
     types: [opened, synchronize, reopened, closed, labeled, unlabeled]
 jobs:
   update-pr-preview:
@@ -32,4 +35,4 @@ jobs:
           --target https://wptpr.live
           --timeout 600
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
