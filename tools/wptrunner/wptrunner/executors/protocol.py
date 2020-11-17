@@ -503,3 +503,15 @@ class PrintProtocolPart(ProtocolPart):
     def render_as_pdf(self, width, height):
         """Output document as PDF"""
         pass
+
+class SetTimezoneProtocolPart(ProtocolPart):
+    """Protocol part for setting timezone"""
+    __metaclass__ = ABCMeta
+
+    name = "set_timezone"
+
+    @abstractmethod
+    def set_timezone(self, timezone):
+        """Set timezone as default timezone."""
+        pass
+

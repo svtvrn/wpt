@@ -25,7 +25,8 @@ from .protocol import (BaseProtocolPart,
                        TestDriverProtocolPart,
                        GenerateTestReportProtocolPart,
                        SetPermissionProtocolPart,
-                       VirtualAuthenticatorProtocolPart)
+                       VirtualAuthenticatorProtocolPart,
+                       SetTimezoneProtocolPart)
 from ..testrunner import Stop
 
 import webdriver as client
@@ -283,6 +284,14 @@ class WebDriverVirtualAuthenticatorProtocolPart(VirtualAuthenticatorProtocolPart
         return self.webdriver.send_session_command("POST", "webauthn/authenticator/%s/uv" % authenticator_id, uv)
 
 
+class WebDriverSetTimezoneProtocolPart(SetTimezoneProtocolPart):
+    def setup(self):
+        self.webdriver = self.parent.webdriver
+
+    def set_timezone(self, timezone):
+        return self.webdriver.send_session_command("POST", "timezone", {"timezone": timezone})
+
+
 class WebDriverProtocol(Protocol):
     implements = [WebDriverBaseProtocolPart,
                   WebDriverTestharnessProtocolPart,
@@ -293,7 +302,8 @@ class WebDriverProtocol(Protocol):
                   WebDriverTestDriverProtocolPart,
                   WebDriverGenerateTestReportProtocolPart,
                   WebDriverSetPermissionProtocolPart,
-                  WebDriverVirtualAuthenticatorProtocolPart]
+                  WebDriverVirtualAuthenticatorProtocolPart,
+                  WebDriverSetTimezoneProtocolPart]
 
     def __init__(self, executor, browser, capabilities, **kwargs):
         super(WebDriverProtocol, self).__init__(executor, browser)

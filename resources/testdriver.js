@@ -437,6 +437,26 @@
             const blocked = state === "blocked";
             return window.test_driver_internal.set_storage_access(origin, embedding_origin, blocked, context);
         },
+
+        /**
+         * Set timezone.
+         *
+         * The set_timezone function set the host default timezone to a new
+         * timezone id.
+         *
+         * This matches the behavior of the {@link
+         * https://docs.google.com/document/d/12vdPTH_Vlkt4pxwlWzR1CjKtLE6y2Z-Qs-GPi_hWXqc
+         * Set Timezone command}.
+         *
+         * @param {String} timezone - IANA Timezone ID.
+         *
+         * @returns {Promise} fulfilled after the timezone is set, or
+         *                    rejected if the set of timezone fails
+         */
+        set_timezone: function(timezone) {
+            return window.test_driver_internal.set_timezone(timezone);
+        },
+
     };
 
     window.test_driver_internal = {
@@ -536,6 +556,10 @@
         },
 
         set_storage_access: function(origin, embedding_origin, blocked, context=null) {
+            return Promise.reject(new Error("unimplemented"));
+        },
+
+        set_timezone: function(timezone) {
             return Promise.reject(new Error("unimplemented"));
         },
     };

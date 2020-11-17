@@ -229,4 +229,8 @@
     window.test_driver_internal.set_user_verified = function(authenticator_id, uv, context=null) {
         return create_action("set_user_verified", {authenticator_id, uv, context});
     };
+
+    window.test_driver_internal.set_timezone = function(timezone) {
+        return create_action("set_timezone", {timezone});
+    };
 })();
