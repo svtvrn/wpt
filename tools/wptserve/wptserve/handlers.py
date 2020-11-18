@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 import traceback
 from collections import defaultdict
 
@@ -286,9 +287,9 @@ class PythonScriptHandler(object):
     def __repr__(self):
         return "<%s base_path:%s url_base:%s>" % (self.__class__.__name__, self.base_path, self.url_base)
 
-    def _load_file(self, request, response, func):
+    def _set_path_and_load_file(self, request, response, func):
         """
-        This loads the requested python file as an environ variable.
+        This modifies the `sys.path` and loads the requested python file as an environ variable.
 
         Once the environ is loaded, the passed `func` is run with this loaded environ.
 
@@ -299,8 +300,11 @@ class PythonScriptHandler(object):
         """
         path = filesystem_path(self.base_path, request, self.url_base)
 
+        sys_path = sys.path[:]
+        sys_modules = sys.modules.copy()
         try:
             environ = {"__file__": path}
+            sys.path.insert(0, os.path.dirname(path))
             with open(path, 'rb') as f:
                 exec(compile(f.read(), path, 'exec'), environ, environ)
 
@@ -309,6 +313,9 @@ class PythonScriptHandler(object):
 
         except IOError:
             raise HTTPException(404)
+        finally:
+            sys.path = sys_path
+            sys.modules = sys_modules
 
     def __call__(self, request, response):
         def func(request, response, environ, path):
@@ -319,7 +326,7 @@ class PythonScriptHandler(object):
             else:
                 raise HTTPException(500, "No main function in script %s" % path)
 
-        self._load_file(request, response, func)
+        self._set_path_and_load_file(request, response, func)
 
     def frame_handler(self, request):
         """
@@ -346,7 +353,7 @@ class PythonScriptHandler(object):
                 raise HTTPException(500, "No main function or handlers in script %s" % path)
 
             return handler
-        return self._load_file(request, None, func)
+        return self._set_path_and_load_file(request, None, func)
 
 
 python_script_handler = PythonScriptHandler()

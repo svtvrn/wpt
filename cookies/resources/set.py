@@ -1,4 +1,4 @@
-from cookies.resources import helpers
+import helpers
 from six.moves.urllib.parse import unquote
 
 from wptserve.utils import isomorphic_encode

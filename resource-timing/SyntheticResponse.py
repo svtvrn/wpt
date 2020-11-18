@@ -2,8 +2,7 @@ from six.moves.urllib.parse import unquote
 
 from wptserve.utils import isomorphic_decode, isomorphic_encode
 
-import importlib
-sleep = importlib.import_module("resource-timing.sleep")
+import sleep
 
 def main(request, response):
     index = isomorphic_encode(request.request_path).index(b"?")

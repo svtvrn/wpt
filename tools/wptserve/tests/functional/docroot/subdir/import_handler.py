@@ -1,4 +1,4 @@
-from subdir import example_module
+import example_module
 
 
 def main(request, response):
