@@ -1,0 +1,20 @@
+<script>
+  window.addEventListener("message", function (event) {
+    if (event.data === "local") {
+      fetch("/common/blank.html")
+                .then(response => {parent.postMessage("success", "*")})
+                .catch(error => {parent.postMessage("failure", "*")});
+    }
+    if (event.data === "public-non-secure") {
+      fetch("http://info.cern.ch/", {mode: "no-cors"})
+                .then(response => {parent.postMessage("success", "*")})
+                .catch(error => {parent.postMessage("failure", "*")});
+    }
+    if (event.data === "public-secure") {
+      fetch("https://www.google.com/", {mode: "no-cors"})
+                .then(response => {parent.postMessage("success", "*")})
+                .catch(error => {parent.postMessage("failure", "*")});
+    }
+  });
+</script>
+
