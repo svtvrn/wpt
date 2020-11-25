@@ -21,6 +21,16 @@ div {
   height: 2em;
 }
 
+#f2 {
+  border: 2px solid gray;
+  height: auto;
+  max-height: 2em;
+  overflow: auto;
+}
+
+#ol2 {
+  height: 10em;
+}
 </style>
 <p>There should be no red.</p>
 <fieldset>
@@ -31,3 +41,13 @@ div {
 <script>
  document.getElementById('last').scrollIntoView();
 </script>
+
+<p>The content should not overflow.</p>
+<fieldset id="f2">
+<ol id="ol2">
+<li>foo
+<li>foo
+<li>foo
+<li>foo
+</ol>
+</fieldset>
