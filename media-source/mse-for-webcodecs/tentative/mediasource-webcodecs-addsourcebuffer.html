@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <title>Test MediaSource addSourceBuffer overloads for WebCodecs Audio/VideoDecoderConfigs</title>
+<script src="/resources/testharness.js"></script>
+<script src="/resources/testharnessreport.js"></script>
+<script>
+
+async_test(t => {
+  assert_true(SourceBuffer.prototype.hasOwnProperty("appendEncodedChunks"),
+      "SourceBuffer prototype hasOwnProperty 'appendEncodedChunks'");
+}, "Test if MSE-for-WebCodecs feature appears supported");
+
+// Only do more extensive tests if the feature appears supported.
+if (SourceBuffer.prototype.hasOwnProperty("appendEncodedChunks")) {
+  testInvalidArguments();
+  testValidArguments();
+}
+
+function getValidAudioConfig() {
+  return {
+    codec: "opus",
+    sampleRate: 48000,
+    numberOfChannels: 2
+  };
+}
+
+function getValidVideoConfig() {
+  return { codec: "vp9" };
+}
+
+// BIG TODO: fix timeout.
+
+function testInvalidArguments() {
+  const INVALID_CASES = [
+    [ { }, "{ empty dictionary }" ],
+    [ { audioConfig: getValidAudioConfig(), videoConfig: getValidVideoConfig() }, "{ both audio and video }" ],
+    [ { audioConfig: { codec: "bogus" } }, "bad audio config" ],
+    [ { videoConfig: { codec: "bogus" } }, "bad video config" ],
+  ];
+
+  INVALID_CASES.forEach(invalid_case => {
+    async_test(t => {
+      var ms = new MediaSource();
+      var sb = ms.addSourceBuffer(invalid_case[0]);
+      assert_equals(sb, undefined, "addSourceBuffer result for invalid case is undefined");
+    }, invalid_case[1]);
+  });
+}
+
+function testValidArguments() {
+  // BIG TODO
+}
+
+</script>
+</html>
